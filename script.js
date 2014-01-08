@@ -56,19 +56,37 @@ function lexicographic(s /*массив*/) { // следующая перест�
 
 function Init(n) {
     var len = factorial(n);
-    var Sn = new Array()//  массив из элементов группы Sn
+    var Sn = new Array() //  массив из элементов группы Sn
     for (var i=0; i<len; i++)
         Sn[i] = new Array();
     for(var i=0; i<n; i++) // тождественная перестановка
         Sn[0][i] = i+1;
     
     
-    for (var i=1; i<len; i++) {
-        Sn[i] = lexicographic(Sn[i-1]); console.log('Sn['+i+']', Sn[i]) }
+    for (var i=1; i<len; i++)           // {
+        Sn[i] = lexicographic(Sn[i-1]); // console.log('Sn['+i+']', Sn[i]) }
+    
+    return Sn;
 }
 
 
 /*******************************************************************************/
+
+function Mult () { // s1*s2*...*sn
+    var res = [];
+    var len = arguments[0].length;
+    var factor = arguments.length;
+    
+    // копируем последний элемент
+    for (var k=0; k<len; k++)
+        res[k] = arguments[factor-1][k];
+    
+    for (var i=0; i<len; i++)
+        for(var j=factor-2; j>=0; j--)
+            res[i] = arguments[j][res[i]-1];
+    // console.log(res);
+    return res;
+}
 
 function Inverse (s /*массив*/) { // обратная к s подстановка
     var res = [];
@@ -84,6 +102,28 @@ function Inverse (s /*массив*/) { // обратная к s подстан�
                res[i] = j + 1;
            }
         }
-    console.log(res);
+    // console.log(res);
     return res;            
 }
+
+function Spec (n /*порядок Sn*/) {
+    var fact = factorial(n);
+    
+    for (var i=1; i<fact; i++) { // перебор по автоморфизмам
+        var Sn = Init(n),
+            y = Sn[i], // задаёт автоморфизм
+            y_1 = Inverse(y),
+            lim = -1, // разделяет разные классы эвивалентности
+            R = 0; // число Райдемайстера
+        
+        while (lim != ) { // перебор по  
+            var f = Sn[++lim],
+                x = Sn[lim+1],
+                x_1 = Inverse(x),
+                g = Mult(y,x,y_1,f,x_1);
+            
+        }
+    }
+}
+    
+    
