@@ -2,6 +2,15 @@ function factorial(n) {
   return (n!=1) ? n*factorial(n-1) : 1;
 }
 
+function find(arr/*массив объектов*/, val/*массив*/) {
+    var len = arr.length;
+    for(var i=0; i<len; i++) {
+        if (arr[i].s.toString() === val.toString()) return i;
+    }
+    return -1;
+}
+
+
 function minMore (s/*массив*/, a/*элем, с кот. сравниваем*/) { // наименьший элемент массива, больший некоторого заданного значения
     var res = s[0];
     var len = s.length;
@@ -68,8 +77,8 @@ function Init(n) {
         Sn[0].s[i] = i+1;
     
     
-    for (var i=1; i<len; i++)           // {
-        Sn[i] = lexicographic(Sn[i-1].s); // console.log('Sn['+i+']', Sn[i]) }
+    for (var i=1; i<len; i++)                // {
+        Sn[i].s = lexicographic(Sn[i-1].s);  // console.log('Sn['+i+']', Sn[i]) }
 
     return Sn;
 }
@@ -127,21 +136,23 @@ function Spec (n /*порядок Sn*/) {
             if (Sn[j].key != 0) // элемент уже в каком-то классе
                 continue;
             else {
-                for (var k=0; k<fact; k++) { // перебор по x элементам группы
+                for (var k=1; k<fact; k++) { // перебор по x элементам группы
                     var x = Sn[k].s,
                         x_1 = Inverse(x),
-                        g = Mult(y, x, y_1, f, x_1); 
+                        g = Mult(y, x, y_1, f, x_1),
+                        ind = find(Sn, g);
                     
-                    // ***TODO*** g.key=1
-                    
+                    Sn[ind].key = 1;                     
                 } // перебор по x элементам группы
                 R[i]++;
             } 
         } // перебор по f элементам группы
         
-        // ***TODO*** обратно занулить все ключи
+        for (var k=0; k<fact; k++) // обратно занулить все ключи
+            Sn[k].key = 0;
         
     } // перебор по автоморфизмам
+    return R;
 }
     
     
